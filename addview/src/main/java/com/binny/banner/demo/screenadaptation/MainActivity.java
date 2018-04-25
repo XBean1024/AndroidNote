@@ -3,6 +3,7 @@ package com.binny.banner.demo.screenadaptation;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -29,9 +30,11 @@ public class MainActivity extends AppCompatActivity {
         *  如： 01234566 可以
         *      02456444 不可以
         *      */
+        ImageView imageView = new ImageView(this);
+        imageView.setImageResource(R.mipmap.ic_launcher);
         linearLayout.addView(textView,0,layoutParams);
         linearLayout.addView(textView1,1,layoutParams);
         linearLayout.addView(textView2,0,layoutParams);
-        linearLayout.addView(textView3,0,layoutParams);
+        linearLayout.addView(imageView,0,layoutParams);
     }
 }
