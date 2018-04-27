@@ -9,3 +9,15 @@
 /captures
 .externalNativeBuild
 libs/
+.idea/caches/
+.idea/checkstyle-idea.xml
+.idea/code-comments.xml
+.idea/codeStyles/
+.idea/gradle.xml
+.idea/kotlinc.xml
+.idea/markdown-navigator.xml
+.idea/markdown-navigator/
+.idea/misc.xml
+.idea/runConfigurations.xml
+.idea/vcs.xml
+.gitignore

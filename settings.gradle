@@ -1,1 +1,1 @@
-include ':sharepreferences', ':activitylanchermode', ':gesturedetector', ':viewpager', ':handlermessage', ':fragment', ':addview', ':smartrefreshlayout'
+include ':sharepreferences', ':activitylanchermode', ':gesturedetector', ':viewpager', ':handlermessage', ':fragment', ':addview', ':smartrefreshlayout', ':scroll'
