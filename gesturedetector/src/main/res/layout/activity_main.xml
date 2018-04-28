@@ -23,12 +23,12 @@
         android:gravity="center"
         android:background="@color/colorAccent"
         />
-        <LinearLayout
+        <ListView
             android:id="@+id/child_view"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:background="@color/colorPrimary"
             android:layout_height="match_parent">
 
-        </LinearLayout>
+        </ListView>
 </com.example.gesturedetector.SuppressibleTitleLayout>

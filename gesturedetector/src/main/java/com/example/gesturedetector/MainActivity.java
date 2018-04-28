@@ -11,11 +11,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.smart.holder.CommonAdapter;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private LinearLayout mLinearLayout;
+    private ListView mListView;
 
 
 
@@ -23,9 +30,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mLinearLayout = findViewById(R.id.child_view);
-
+        mListView = findViewById(R.id.child_view);
+        Gson gson = new Gson();
+        MoocBean mDataBeanList = gson.fromJson(Data.MUTIL_OBJECT, new TypeToken<MoocBean>(){}.getType());
+        mListView.setAdapter(new CommonAdapter(this, mDataBeanList.getData(), R.layout.list_view_item,new ListDataViewHolderHelper()));
     }
-
-
 }
