@@ -22,6 +22,7 @@ public class SuppressibleTitleLayout extends LinearLayout implements GestureDete
     private float y1 = 0;
     private float y2 = 0;
     private Context mContext;
+    private boolean mIsUp;
     public SuppressibleTitleLayout(Context context) {
         super(context);
         init(context);
@@ -84,6 +85,7 @@ public class SuppressibleTitleLayout extends LinearLayout implements GestureDete
          *
          * */
         if (distanceY < 0) {
+            mIsUp = false;
             if (mScrollY + distance >= 0) {
                 Logger.logInfo(TAG, "不完全显示");
                 scrollBy(0, distance);
@@ -93,6 +95,7 @@ public class SuppressibleTitleLayout extends LinearLayout implements GestureDete
             }
 
         } else if (distanceY > 0) {
+            mIsUp = true;
             Logger.logInfo(TAG, "mScrollY = "+mScrollY);
             if (mScrollY + distance < mTitleHeight) {//为完全隐藏
                 Logger.logInfo(TAG, "不可以完全隐藏");
@@ -118,6 +121,12 @@ public class SuppressibleTitleLayout extends LinearLayout implements GestureDete
 
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        if (mScrollY<mTitleHeight&&mIsUp) {
+            scrollTo(0,mTitleHeight);
+        }
+        if (mScrollY>0&&!mIsUp) {
+            scrollTo(0,0);
+        }
         return false;
     }
 
