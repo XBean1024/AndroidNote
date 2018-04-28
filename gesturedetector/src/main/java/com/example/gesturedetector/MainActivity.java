@@ -24,12 +24,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mLinearLayout = findViewById(R.id.child_view);
-       mLinearLayout.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               Logger.logInfo("oooooooooooooooooooooooo");
-           }
-       });
+
     }
 
 

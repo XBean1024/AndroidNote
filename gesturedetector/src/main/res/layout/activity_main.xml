@@ -12,7 +12,7 @@
     <TextView
         android:id="@+id/title"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="180dp"
         android:background="#FFFF80"
         android:gravity="center"
         android:text="标题" />

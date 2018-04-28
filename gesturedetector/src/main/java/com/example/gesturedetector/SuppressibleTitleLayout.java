@@ -16,12 +16,12 @@ import android.widget.Toast;
  */
 public class SuppressibleTitleLayout extends LinearLayout implements GestureDetector.OnGestureListener {
     private String TAG = "dddddddddd";
-    private int mTitleHeight = 240;
+    private int mTitleHeight;
     private GestureDetector mGestureDetector;
     private int mScrollY;
     private float y1 = 0;
     private float y2 = 0;
-
+    private Context mContext;
     public SuppressibleTitleLayout(Context context) {
         super(context);
         init(context);
@@ -33,6 +33,7 @@ public class SuppressibleTitleLayout extends LinearLayout implements GestureDete
     }
 
     private void init(Context context) {
+        mContext = context;
         mGestureDetector = new GestureDetector(context, this);
     }
 
@@ -53,6 +54,7 @@ public class SuppressibleTitleLayout extends LinearLayout implements GestureDete
 
     @Override
     public boolean onDown(MotionEvent e) {
+        mTitleHeight = getChildAt(0).getMeasuredHeight();
         return true;
     }
 
@@ -71,6 +73,9 @@ public class SuppressibleTitleLayout extends LinearLayout implements GestureDete
         mScrollY = getScrollY();
         int distance = (int) distanceY;
 
+        Logger.logInfo(TAG, "mScrollY = " + mScrollY);
+        Logger.logInfo(TAG, "distance = " + distance);
+        Logger.logInfo(TAG, "mScrollY + distance = " + (mScrollY + distance));
         /*
          *  1 滑动条件
          * distanceY < 0 ：满足下滑条件
@@ -80,22 +85,24 @@ public class SuppressibleTitleLayout extends LinearLayout implements GestureDete
          * */
         if (distanceY < 0) {
             if (mScrollY + distance >= 0) {
+                Logger.logInfo(TAG, "不完全显示");
                 scrollBy(0, distance);
-            }else {
-                Logger.logInfo("mScrollY 00= "+mScrollY);
+            } else {
+                Logger.logInfo(TAG, "完全显示");
                 scrollBy(0, -mScrollY);
             }
 
         } else if (distanceY > 0) {
-            if (mScrollY + distance <= mTitleHeight) {//为完全隐藏
+            Logger.logInfo(TAG, "mScrollY = "+mScrollY);
+            if (mScrollY + distance < mTitleHeight) {//为完全隐藏
+                Logger.logInfo(TAG, "不可以完全隐藏");
                 setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, getHeight() + mTitleHeight));
                 scrollBy(0, distance);
-                if (mScrollY + distance == mTitleHeight) {
-                    return false;
-                }
-                return true;
+                return false;
             } else {
+                Logger.logInfo(TAG, "可以完全隐藏");
                 int lastY = mTitleHeight - mScrollY;
+                Logger.logInfo(TAG,"lastY"+lastY);
                 scrollBy(0, lastY);
                 return false;
             }
@@ -103,32 +110,6 @@ public class SuppressibleTitleLayout extends LinearLayout implements GestureDete
         return false;
     }
 
-    @Override
-    public boolean onInterceptTouchEvent(MotionEvent event) {
-        Logger.logInfo("mScrollY = " + mScrollY);
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                y1 = event.getY();
-                break;
-            case MotionEvent.ACTION_MOVE:
-                y2 = event.getY();
-                if (y1 - y2 > 0) {
-                    // up
-
-                    if (mScrollY < mTitleHeight) {
-                        return true;
-                    }
-                } else if (y2 - y1 > 0) {
-                    //down
-                    if (mScrollY > 0) {
-                        return true;
-                    }
-                }
-                break;
-
-        }
-        return false;
-    }
 
     @Override
     public void onLongPress(MotionEvent e) {
