@@ -1,4 +1,4 @@
-package com.example.gesturedetector;
+package com.example.scrolllayout;
 
 import android.app.Activity;
 import android.view.View;

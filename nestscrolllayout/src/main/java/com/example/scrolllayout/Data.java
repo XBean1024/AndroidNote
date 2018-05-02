@@ -1,4 +1,4 @@
-package com.example.gesturedetector;
+package com.example.scrolllayout;
 
 /**
  * Created by smart on 2017/4/24.

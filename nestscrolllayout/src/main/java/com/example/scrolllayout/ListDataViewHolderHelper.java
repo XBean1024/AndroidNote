@@ -1,4 +1,4 @@
-package com.example.gesturedetector;
+package com.example.scrolllayout;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -37,7 +37,6 @@ public class ListDataViewHolderHelper implements IViewHolderHelper<ListDataViewH
         viewHolder.name.setText(iBaseBeanList.get(position).getName());//这个地方自己可以优化的，不必要每次获取list
         viewHolder.description.setText(iBaseBeanList.get(position).getDescription());
         viewHolder.learner.setText("人数："+iBaseBeanList.get(position).getLearner());
-        Logger.logInfo("image","bindListDataToView"+iBaseBeanList.get(position).getPicSmall());
         UtilImageloader.setImage(context,iBaseBeanList.get(position).getPicSmall(),viewHolder.picSmall);
     }
 }
