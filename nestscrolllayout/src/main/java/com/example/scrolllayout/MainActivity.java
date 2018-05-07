@@ -6,22 +6,25 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.scrolllayout.bean.MoocBean;
+import com.example.scrolllayout.viewholder.ListDataViewHolderHelper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.smart.holder.CommonAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
-    private MyListView mListView;
+//    private UleNestedScrollLayoutChildListView mListView;
 
 
     View header;
     private TextView detail;
+    private MyListView mListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main1);
+        setContentView(R.layout.activity_main);
 
         mListView = findViewById(R.id.child_view);
 

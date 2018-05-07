@@ -4,29 +4,31 @@ import android.content.Context;
 import android.support.v4.view.NestedScrollingParent;
 import android.support.v4.view.NestedScrollingParentHelper;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 
-public class UleScrollLayoutParent extends LinearLayout implements NestedScrollingParent {
-    private String Tag = "UleNestedScrollParent";
+import com.example.scrolllayout.Logger;
+
+public class UleNestedScrollLayoutParent extends LinearLayout implements NestedScrollingParent {
     private View mHeaderView;
-    private View mContentView;
-    private UleScrollLayoutChild mScrollChild;
+    private View mFooterView;
+    private View mSuspensionView;
     private NestedScrollingParentHelper mParentHelper;
     private int mHeaderViewHeight;
+    private int mFooterViewHeight;
     private int mContentViewHeight;
-    private int mLastTouchY;
-    public boolean topShow;
+    private int mDownY;
+    private int mUpY;
 
-    public UleScrollLayoutParent(Context context, AttributeSet attrs) {
+
+    public UleNestedScrollLayoutParent(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public UleScrollLayoutParent(Context context) {
+    public UleNestedScrollLayoutParent(Context context) {
         super(context);
         init();
     }
@@ -34,23 +36,30 @@ public class UleScrollLayoutParent extends LinearLayout implements NestedScrolli
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        mHeaderView = getChildAt(0);
-        mContentView = getChildAt(1);
+        mHeaderView = getChildAt(0);//要隐藏的view
+        mSuspensionView = getChildAt(1);//悬浮的view
+        mFooterView = getChildAt(getChildCount() - 1);
         mHeaderView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
                 if (mHeaderViewHeight <= 0) {
                     mHeaderViewHeight = mHeaderView.getMeasuredHeight();
-                    Log.i(Tag, "mHeaderViewHeight:" + mHeaderViewHeight + ",mContentViewHeight:" + mContentViewHeight);
                 }
             }
         });
-        mContentView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        mFooterView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                if (mFooterViewHeight <= 0) {
+                    mFooterViewHeight = mHeaderView.getMeasuredHeight();
+                }
+            }
+        });
+        mSuspensionView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
                 if (mContentViewHeight <= 0) {
-                    mContentViewHeight = mContentView.getMeasuredHeight();
-                    Log.i(Tag, "mHeaderViewHeight:" + mHeaderViewHeight + ",mContentViewHeight:" + mContentViewHeight);
+                    mContentViewHeight = mSuspensionView.getMeasuredHeight();
                 }
             }
         });
@@ -66,69 +75,65 @@ public class UleScrollLayoutParent extends LinearLayout implements NestedScrolli
         for (int i = 0; i < count; i++) {
             height += getChildAt(i).getMeasuredHeight();
         }
+//        height += mFooterView.getMeasuredHeight();
+        Logger.logInfo("mFooterView.getMeasuredHeight() = " + mFooterView.getMeasuredHeight());
         setMeasuredDimension(getMeasuredWidth(), height);
     }
 
-    public int getTopViewHeight() {
-        Log.i(Tag, "getTopViewHeight--" + mHeaderView.getMeasuredHeight());
+    public int getHeaderViewHeight() {
         return mHeaderView.getMeasuredHeight();
     }
 
     @Override
     public boolean onStartNestedScroll(View child, View target, int nestedScrollAxes) {
-        Log.i(Tag, "onStartNestedScroll--" + "child:" + child + ",target:" + target + ",nestedScrollAxes:" + nestedScrollAxes);
         return true;
     }
 
     private void init() {
         mParentHelper = new NestedScrollingParentHelper(this);
-
     }
 
     @Override
     public void onNestedScrollAccepted(View child, View target, int nestedScrollAxes) {
-        Log.i(Tag, "onNestedScrollAccepted" + "child:" + child + ",target:" + target + ",nestedScrollAxes:" + nestedScrollAxes);
         mParentHelper.onNestedScrollAccepted(child, target, nestedScrollAxes);
     }
 
     @Override
     public void onStopNestedScroll(View target) {
-        Log.i(Tag, "onStopNestedScroll--target:" + target);
         mParentHelper.onStopNestedScroll(target);
     }
 
     @Override
     public void onNestedScroll(View target, int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed) {
-        Log.i(Tag, "onNestedScroll--" + "target:" + target + ",dxConsumed" + dxConsumed + ",dyConsumed:" + dyConsumed
-                + ",dxUnconsumed:" + dxUnconsumed + ",dyUnconsumed:" + dyUnconsumed);
     }
 
+    /**
+     * @param target
+     * @param dx       父view 在x方向上滚动的相对距离
+     * @param dy       父view 在y方向上滚动的相对距离
+     * @param consumed
+     */
     @Override
     public void onNestedPreScroll(View target, int dx, int dy, int[] consumed) {
 
-        if (showImg(dy) || hideImg(dy)) {//如果父亲自己要滑动，则拦截
+        if (showHeader(dy) || hideHeader(dy)) {//如果父亲自己要滑动，则拦截
             consumed[1] = dy;
             scrollBy(0, dy);
-            Log.i("onNestedPreScroll", "Parent滑动：" + dy);
         }
-        Log.i(Tag, "onNestedPreScroll--getScrollY():" + getScrollY() + ",dx:" + dx + ",dy:" + dy + ",consumed:" + consumed);
     }
 
     @Override
     public boolean onNestedFling(View target, float velocityX, float velocityY, boolean consumed) {
-        Log.i(Tag, "onNestedFling--target:" + target);
         return false;
     }
 
     @Override
     public boolean onNestedPreFling(View target, float velocityX, float velocityY) {
-        Log.i(Tag, "onNestedPreFling--target:" + target);
         return false;
     }
 
     @Override
     public int getNestedScrollAxes() {
-        Log.i(Tag, "getNestedScrollAxes");
         return 0;
     }
 
@@ -148,27 +153,20 @@ public class UleScrollLayoutParent extends LinearLayout implements NestedScrolli
     /**
      * 下拉的时候是否要向下滑动显示图片
      */
-    public boolean showImg(int dy) {
+    public boolean showHeader(int dy) {
         if (dy < 0) {
-
-//            if(getScrollY()>0&&mScrollChild.getScrollY()==0){//如果parent外框，还可以往上滑动
             if (getScrollY() > 0) {
-
                 return true;
             }
         }
-
-
         return false;
     }
 
 
     /**
      * 上拉的时候，是否要向上滑动，隐藏图片
-     *
-     * @return
      */
-    public boolean hideImg(int dy) {
+    public boolean hideHeader(int dy) {
         if (dy > 0) {
             if (getScrollY() < mHeaderViewHeight) {//如果parent外框，还可以往下滑动
                 return true;
@@ -179,44 +177,30 @@ public class UleScrollLayoutParent extends LinearLayout implements NestedScrolli
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            return true;
-        }
-        return super.onTouchEvent(event);
+        return event.getAction() == MotionEvent.ACTION_DOWN || super.onTouchEvent(event);
     }
-
-    @Override
-    public boolean onInterceptTouchEvent(MotionEvent event) {
-
-        return super.onInterceptTouchEvent(event);
-    }
-
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
-        Log.i("aaa", "getY():getRawY:" + event.getRawY());
-
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                mLastTouchY = (int) (event.getRawY() + 0.5f);
-
+                mDownY = (int) (event.getRawY() + 0.5f);
                 break;
             case MotionEvent.ACTION_MOVE:
                 int y = (int) (event.getRawY() + 0.5f);
-                int dy = mLastTouchY - y;
-                mLastTouchY = y;
-                if (showImg(dy) || hideImg(dy)) {//如果父亲自己要滑动
+                int dy = mDownY - y;
+                mDownY = y;
+                if (showHeader(dy) || hideHeader(dy)) {//如果父亲自己要滑动
                     scrollBy(0, dy);
                 }
                 break;
             case MotionEvent.ACTION_UP:
-                int up_y = (int) (event.getRawY() + 0.5f);
-                if (up_y > mLastTouchY) {//向上
+                mUpY = (int) (event.getRawY() + 0.5f);
+                if (mUpY > mDownY) {//向上
                     scrollBy(0, mHeaderViewHeight);
-                }else if (up_y < mLastTouchY){
+                } else if (mUpY < mDownY) {
                     scrollBy(0, -mHeaderViewHeight);
                 }
-
                 break;
         }
         return super.dispatchTouchEvent(event);

@@ -1,4 +1,4 @@
-package com.example.scrolllayout;
+package com.example.scrolllayout.bean;
 
 import java.io.Serializable;
 import java.util.List;

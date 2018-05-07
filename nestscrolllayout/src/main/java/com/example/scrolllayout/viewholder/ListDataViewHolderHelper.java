@@ -1,10 +1,15 @@
-package com.example.scrolllayout;
+package com.example.scrolllayout.viewholder;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.View;
 
 
+import com.example.scrolllayout.Logger;
+import com.example.scrolllayout.bean.MoocBean;
+import com.example.scrolllayout.R;
+import com.example.scrolllayout.UtilImageloader;
+import com.example.scrolllayout.UtilWidget;
 import com.smart.holder.iinterface.IViewHolder;
 import com.smart.holder.iinterface.IViewHolderHelper;
 
@@ -37,6 +42,7 @@ public class ListDataViewHolderHelper implements IViewHolderHelper<ListDataViewH
         viewHolder.name.setText(iBaseBeanList.get(position).getName());//这个地方自己可以优化的，不必要每次获取list
         viewHolder.description.setText(iBaseBeanList.get(position).getDescription());
         viewHolder.learner.setText("人数："+iBaseBeanList.get(position).getLearner());
+        Logger.logInfo("pos","pos = "+position);
         UtilImageloader.setImage(context,iBaseBeanList.get(position).getPicSmall(),viewHolder.picSmall);
     }
 }

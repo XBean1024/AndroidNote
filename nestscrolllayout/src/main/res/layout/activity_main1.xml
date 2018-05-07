@@ -1,43 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="#FFC0C0"
-    android:layout_height="match_parent">
-    <com.example.scrolllayout.scrollview.UleScrollLayoutParent
+    android:orientation="vertical">
+
+    <com.example.scrolllayout.scrollview.UleNestedScrollLayoutParent
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:clickable="true"
         android:orientation="vertical">
+
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="#008000"
+            android:orientation="vertical">
+
             <TextView
-                android:onClick="text"
                 android:id="@+id/tv_search"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:gravity="center"
+                android:onClick="text"
                 android:padding="20dp"
                 android:text="搜索" />
         </LinearLayout>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:background="#f0f"
-            android:onClick="title"
             android:layout_gravity="center"
+            android:background="#f0f"
             android:gravity="center"
+            android:onClick="title"
             android:text="标题" />
-        <com.example.scrolllayout.scrollview.UleScrollLayoutChild
+
+        <com.example.scrolllayout.scrollview.UleNestedScrollLayoutChildListView
+            android:id="@+id/child_view"
+            android:numColumns="1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <com.example.scrolllayout.MyListView
-                android:id="@+id/child_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/colorPrimary"
-                android:orientation="vertical" />
-        </com.example.scrolllayout.scrollview.UleScrollLayoutChild>
-    </com.example.scrolllayout.scrollview.UleScrollLayoutParent>
-</RelativeLayout>
+            android:layout_height="wrap_content">
+        </com.example.scrolllayout.scrollview.UleNestedScrollLayoutChildListView>
+    </com.example.scrolllayout.scrollview.UleNestedScrollLayoutParent>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="#00FFFF"
+        android:text="dibu" />
+</LinearLayout>

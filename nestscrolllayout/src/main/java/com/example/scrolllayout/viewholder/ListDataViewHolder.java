@@ -1,4 +1,4 @@
-package com.example.scrolllayout;
+package com.example.scrolllayout.viewholder;
 
 import android.widget.ImageView;
 import android.widget.TextView;
